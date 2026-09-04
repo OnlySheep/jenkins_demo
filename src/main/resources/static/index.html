@@ -1,0 +1,577 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TechNotes - 技术笔记</title>
+    <meta name="description" content="技术文章、开发经验与编程笔记">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family:
+                -apple-system,
+                BlinkMacSystemFont,
+                "Segoe UI",
+                "PingFang SC",
+                "Microsoft YaHei",
+                Arial,
+                sans-serif;
+            background: #f5f7fa;
+            color: #303133;
+            line-height: 1.7;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        /* 顶部导航 */
+        .header {
+            height: 64px;
+            background: #ffffff;
+            border-bottom: 1px solid #ebeef5;
+        }
+
+        .nav {
+            max-width: 1180px;
+            height: 64px;
+            margin: auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .logo {
+            font-size: 21px;
+            font-weight: 700;
+            letter-spacing: .3px;
+        }
+
+        .logo span {
+            color: #409eff;
+        }
+
+        .menu {
+            display: flex;
+            gap: 30px;
+            font-size: 14px;
+            color: #606266;
+        }
+
+        .menu a:hover {
+            color: #409eff;
+        }
+
+        /* 页面主体 */
+        .container {
+            max-width: 1180px;
+            margin: 35px auto;
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) 310px;
+            gap: 28px;
+        }
+
+        /* Banner */
+        .banner {
+            background: linear-gradient(135deg, #409eff, #667eea);
+            color: white;
+            border-radius: 12px;
+            padding: 38px 42px;
+            margin-bottom: 24px;
+        }
+
+        .banner h1 {
+            font-size: 28px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .banner p {
+            font-size: 14px;
+            opacity: .9;
+        }
+
+        /* 文章卡片 */
+        .article {
+            background: #fff;
+            border: 1px solid #ebeef5;
+            border-radius: 10px;
+            padding: 26px 30px;
+            margin-bottom: 18px;
+            transition: all .2s ease;
+        }
+
+        .article:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, .05);
+        }
+
+        .article h2 {
+            font-size: 19px;
+            font-weight: 600;
+            margin-bottom: 7px;
+        }
+
+        .article h2:hover {
+            color: #409eff;
+        }
+
+        .meta {
+            font-size: 12px;
+            color: #909399;
+            margin-bottom: 12px;
+        }
+
+        .description {
+            color: #606266;
+            font-size: 14px;
+            margin-bottom: 15px;
+        }
+
+        .tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 7px;
+        }
+
+        .tag {
+            display: inline-block;
+            background: #ecf5ff;
+            color: #409eff;
+            border-radius: 4px;
+            padding: 2px 9px;
+            font-size: 12px;
+        }
+
+        /* 侧边栏 */
+        .card {
+            background: #fff;
+            border: 1px solid #ebeef5;
+            border-radius: 10px;
+            padding: 23px;
+            margin-bottom: 20px;
+        }
+
+        .card-title {
+            font-size: 16px;
+            font-weight: 600;
+            border-left: 3px solid #409eff;
+            padding-left: 10px;
+            margin-bottom: 16px;
+        }
+
+        /* 搜索框 */
+        .search {
+            display: flex;
+            border: 1px solid #dcdfe6;
+            border-radius: 6px;
+            overflow: hidden;
+        }
+
+        .search input {
+            width: 100%;
+            border: 0;
+            outline: none;
+            padding: 9px 11px;
+            font-size: 13px;
+        }
+
+        .search button {
+            border: 0;
+            background: #409eff;
+            color: white;
+            padding: 0 16px;
+            cursor: pointer;
+        }
+
+        /* 热门文章 */
+        .hot-list {
+            list-style: none;
+        }
+
+        .hot-list li {
+            padding: 9px 0;
+            border-bottom: 1px solid #f2f2f2;
+            font-size: 13px;
+            color: #606266;
+        }
+
+        .hot-list li:last-child {
+            border-bottom: 0;
+        }
+
+        .hot-list li:hover {
+            color: #409eff;
+        }
+
+        /* 分类 */
+        .category {
+            display: flex;
+            justify-content: space-between;
+            padding: 7px 0;
+            font-size: 13px;
+            color: #606266;
+        }
+
+        .number {
+            color: #909399;
+        }
+
+        /* 页脚 */
+        .footer {
+            text-align: center;
+            color: #909399;
+            font-size: 12px;
+            padding: 25px 0 40px;
+        }
+
+        /* 移动端 */
+        @media (max-width: 800px) {
+
+            .nav {
+                padding: 0 20px;
+            }
+
+            .menu {
+                gap: 15px;
+            }
+
+            .container {
+                margin: 20px;
+                grid-template-columns: 1fr;
+            }
+
+            .banner {
+                padding: 30px;
+            }
+        }
+
+        @media (max-width: 500px) {
+
+            .menu a:nth-child(n+4) {
+                display: none;
+            }
+
+            .article {
+                padding: 22px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<!-- 导航栏 -->
+<header class="header">
+    <nav class="nav">
+
+        <div class="logo">
+            Tech<span>Notes</span>
+        </div>
+
+        <div class="menu">
+            <a href="#">首页</a>
+            <a href="#">技术</a>
+            <a href="#">开发</a>
+            <a href="#">运维</a>
+            <a href="#">随笔</a>
+        </div>
+
+    </nav>
+</header>
+
+
+<!-- 主体 -->
+<main class="container">
+
+    <section>
+
+        <!-- Banner -->
+        <div class="banner">
+            <h1>技术笔记</h1>
+            <p>
+                分享编程、软件开发、服务器与互联网技术相关内容。
+            </p>
+        </div>
+
+
+        <!-- 文章列表 -->
+
+        <article class="article">
+
+            <h2>
+                <a href="#">Spring Boot 项目结构设计与实践</a>
+            </h2>
+
+            <div class="meta">
+                2026-08-28　·　Java　·　阅读 326
+            </div>
+
+            <p class="description">
+                从 Controller、Service、Repository 到配置管理，
+                介绍 Spring Boot 项目中常见的代码组织方式以及实践经验。
+            </p>
+
+            <div class="tags">
+                <span class="tag">Java</span>
+                <span class="tag">Spring Boot</span>
+            </div>
+
+        </article>
+
+
+        <article class="article">
+
+            <h2>
+                <a href="#">Docker 容器化部署实践</a>
+            </h2>
+
+            <div class="meta">
+                2026-08-25　·　Docker　·　阅读 241
+            </div>
+
+            <p class="description">
+                介绍 Docker 镜像、容器、网络以及数据卷的基本概念，
+                并整理常见应用部署方式。
+            </p>
+
+            <div class="tags">
+                <span class="tag">Docker</span>
+                <span class="tag">DevOps</span>
+            </div>
+
+        </article>
+
+
+        <article class="article">
+
+            <h2>
+                <a href="#">Kubernetes 常用资源介绍</a>
+            </h2>
+
+            <div class="meta">
+                2026-08-21　·　Kubernetes　·　阅读 512
+            </div>
+
+            <p class="description">
+                从 Pod、Deployment、Service 到 Ingress，
+                简单介绍 Kubernetes 中常见资源的作用与使用方式。
+            </p>
+
+            <div class="tags">
+                <span class="tag">Kubernetes</span>
+                <span class="tag">云原生</span>
+            </div>
+
+        </article>
+
+
+        <article class="article">
+
+            <h2>
+                <a href="#">Redis 常用数据结构与应用场景</a>
+            </h2>
+
+            <div class="meta">
+                2026-08-18　·　Redis　·　阅读 198
+            </div>
+
+            <p class="description">
+                整理 String、Hash、List、Set、ZSet 等数据结构，
+                以及缓存、排行榜、计数器等常见应用场景。
+            </p>
+
+            <div class="tags">
+                <span class="tag">Redis</span>
+                <span class="tag">数据库</span>
+            </div>
+
+        </article>
+
+
+        <article class="article">
+
+            <h2>
+                <a href="#">Linux 服务器常用命令整理</a>
+            </h2>
+
+            <div class="meta">
+                2026-08-15　·　Linux　·　阅读 367
+            </div>
+
+            <p class="description">
+                整理 Linux 环境下文件管理、进程管理、网络排查、
+                日志查看以及系统监控等常用命令。
+            </p>
+
+            <div class="tags">
+                <span class="tag">Linux</span>
+                <span class="tag">服务器</span>
+            </div>
+
+        </article>
+
+
+        <article class="article">
+
+            <h2>
+                <a href="#">Nginx 反向代理配置基础</a>
+            </h2>
+
+            <div class="meta">
+                2026-08-12　·　Nginx　·　阅读 289
+            </div>
+
+            <p class="description">
+                介绍 Nginx Server、Location、Proxy Pass 等常见配置，
+                以及静态网站和后端服务的基本代理方式。
+            </p>
+
+            <div class="tags">
+                <span class="tag">Nginx</span>
+                <span class="tag">Web</span>
+            </div>
+
+        </article>
+
+    </section>
+
+
+    <!-- 右侧 -->
+    <aside>
+
+        <!-- 搜索 -->
+        <div class="card">
+
+            <div class="card-title">
+                搜索文章
+            </div>
+
+            <div class="search">
+                <input
+                    type="text"
+                    placeholder="输入关键词..."
+                >
+                <button>
+                    搜索
+                </button>
+            </div>
+
+        </div>
+
+
+        <!-- 热门文章 -->
+        <div class="card">
+
+            <div class="card-title">
+                热门文章
+            </div>
+
+            <ul class="hot-list">
+
+                <li>
+                    Spring Boot 项目结构设计与实践
+                </li>
+
+                <li>
+                    Kubernetes 常用资源介绍
+                </li>
+
+                <li>
+                    Linux 服务器常用命令整理
+                </li>
+
+                <li>
+                    Docker 容器化部署实践
+                </li>
+
+                <li>
+                    Nginx 反向代理配置基础
+                </li>
+
+            </ul>
+
+        </div>
+
+
+        <!-- 分类 -->
+        <div class="card">
+
+            <div class="card-title">
+                文章分类
+            </div>
+
+            <div class="category">
+                <span>Java</span>
+                <span class="number">32</span>
+            </div>
+
+            <div class="category">
+                <span>Web 开发</span>
+                <span class="number">18</span>
+            </div>
+
+            <div class="category">
+                <span>Linux</span>
+                <span class="number">15</span>
+            </div>
+
+            <div class="category">
+                <span>DevOps</span>
+                <span class="number">12</span>
+            </div>
+
+            <div class="category">
+                <span>数据库</span>
+                <span class="number">10</span>
+            </div>
+
+            <div class="category">
+                <span>云原生</span>
+                <span class="number">8</span>
+            </div>
+
+        </div>
+
+
+        <!-- 标签 -->
+        <div class="card">
+
+            <div class="card-title">
+                标签
+            </div>
+
+            <div class="tags">
+
+                <span class="tag">Java</span>
+                <span class="tag">Spring</span>
+                <span class="tag">Docker</span>
+                <span class="tag">K8s</span>
+                <span class="tag">Linux</span>
+                <span class="tag">Nginx</span>
+                <span class="tag">Redis</span>
+                <span class="tag">MySQL</span>
+
+            </div>
+
+        </div>
+
+    </aside>
+
+</main>
+
+
+<footer class="footer">
+    © 2026 TechNotes · Technology & Development
+</footer>
+
+</body>
+</html>
+
