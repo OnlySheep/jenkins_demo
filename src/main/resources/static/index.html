@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="light">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -304,6 +304,119 @@
                 gap: 8px;
             }
         }
+
+        /* Theme colors and display mode */
+        :root {
+            color-scheme: light;
+            --page-background: #f5f7fa;
+            --surface: #ffffff;
+            --text-primary: #303133;
+            --text-secondary: #606266;
+            --text-muted: #909399;
+            --border: #ebeef5;
+            --border-strong: #dcdfe6;
+            --divider: #f2f2f2;
+            --tag-background: #ecf5ff;
+            --tag-text: #409eff;
+            --theme-control-background: #f5f7fa;
+            --hover-shadow: rgba(0, 0, 0, .05);
+        }
+
+        html[data-theme="dark"] {
+            color-scheme: dark;
+            --page-background: #151923;
+            --surface: #202632;
+            --text-primary: #edf2f7;
+            --text-secondary: #bdc7d5;
+            --text-muted: #8995a5;
+            --border: #343d4d;
+            --border-strong: #465166;
+            --divider: #343d4d;
+            --tag-background: #203b5d;
+            --tag-text: #89c4ff;
+            --theme-control-background: #181e29;
+            --hover-shadow: rgba(0, 0, 0, .28);
+        }
+
+        body {
+            background: var(--page-background);
+            color: var(--text-primary);
+            transition: background-color .2s ease, color .2s ease;
+        }
+
+        .header, .article, .card {
+            background: var(--surface);
+            border-color: var(--border);
+        }
+
+        .header, .article, .card, .search {
+            transition: background-color .2s ease, border-color .2s ease;
+        }
+
+        .menu, .description, .hot-list li, .category {
+            color: var(--text-secondary);
+        }
+
+        .language, .language button, .meta, .number, .footer {
+            color: var(--text-muted);
+        }
+
+        .language .separator, .search {
+            border-color: var(--border-strong);
+        }
+
+        .tag {
+            background: var(--tag-background);
+            color: var(--tag-text);
+        }
+
+        .article:hover {
+            box-shadow: 0 6px 20px var(--hover-shadow);
+        }
+
+        .search input {
+            background: transparent;
+            color: var(--text-primary);
+        }
+
+        .search input::placeholder {
+            color: var(--text-muted);
+        }
+
+        .hot-list li {
+            border-color: var(--divider);
+        }
+
+        .theme-switcher {
+            display: flex;
+            align-items: center;
+            padding: 3px;
+            border: 1px solid var(--border-strong);
+            border-radius: 6px;
+            background: var(--theme-control-background);
+        }
+
+        .theme-option {
+            min-width: 44px;
+            border: 0;
+            border-radius: 4px;
+            padding: 4px 7px;
+            background: transparent;
+            color: var(--text-muted);
+            cursor: pointer;
+            font-size: 12px;
+            line-height: 1.4;
+            transition: background-color .2s ease, color .2s ease;
+        }
+
+        .theme-option:hover {
+            color: #409eff;
+        }
+
+        .theme-option.active {
+            background: #409eff;
+            color: #ffffff;
+        }
     </style>
 </head>
 
@@ -326,7 +439,17 @@
                 <a href="#" data-i18n="devops">DevOps</a>
                 <a href="#" data-i18n="notes">Notes</a>
             </div>
-
+            <div class="theme-switcher" role="group" aria-label="Theme">
+                <button type="button" class="theme-option" data-theme-choice="light" data-i18n="themeLight">
+                    Day
+                </button>
+                <button type="button" class="theme-option" data-theme-choice="dark" data-i18n="themeDark">
+                    Night
+                </button>
+                <button type="button" class="theme-option" data-theme-choice="system" data-i18n="themeSystem">
+                    System
+                </button>
+            </div>
             <div class="language">
                 <button id="enBtn" class="active" onclick="setLanguage('en')">
                     English
@@ -720,7 +843,11 @@
             database: "Database",
             cloudNative: "Cloud Native",
 
-            tagsTitle: "Tags"
+            tagsTitle: "Tags",
+
+            themeLight: "Day",
+            themeDark: "Night",
+            themeSystem: "System"
         },
 
 
@@ -786,11 +913,63 @@
             database: "数据库",
             cloudNative: "云原生",
 
-            tagsTitle: "标签"
+            tagsTitle: "标签",
+
+            themeLight: "白天",
+            themeDark: "夜晚",
+            themeSystem: "跟随系统"
         }
     };
 
 
+
+    const themeMediaQuery =
+        window.matchMedia("(prefers-color-scheme: dark)");
+
+    let themePreference = "system";
+
+    function setTheme(preference, shouldPersist = true) {
+
+        const validPreferences = ["light", "dark", "system"];
+
+        themePreference = validPreferences.includes(preference)
+            ? preference
+            : "system";
+
+        const resolvedTheme =
+            themePreference === "system"
+                ? (themeMediaQuery.matches ? "dark" : "light")
+                : themePreference;
+
+        document.documentElement.dataset.theme = resolvedTheme;
+
+        document
+            .querySelectorAll("[data-theme-choice]")
+            .forEach(button => {
+                button.classList.toggle(
+                    "active",
+                    button.dataset.themeChoice === themePreference
+                );
+            });
+
+        if (shouldPersist) {
+            localStorage.setItem("themePreference", themePreference);
+        }
+    }
+
+    document
+        .querySelectorAll("[data-theme-choice]")
+        .forEach(button => {
+            button.addEventListener("click", () => {
+                setTheme(button.dataset.themeChoice);
+            });
+        });
+
+    themeMediaQuery.addEventListener("change", () => {
+        if (themePreference === "system") {
+            setTheme("system", false);
+        }
+    });
     function setLanguage(language) {
 
         const elements = document.querySelectorAll("[data-i18n]");
@@ -850,6 +1029,10 @@
      * 如果用户之前手动选择过语言，
      * 则记住用户的选择。
      */
+    const savedTheme =
+        localStorage.getItem("themePreference") || "system";
+
+    setTheme(savedTheme, false);
     const savedLanguage =
         localStorage.getItem("language") || "en";
 
@@ -859,4 +1042,3 @@
 
 </body>
 </html>
-
