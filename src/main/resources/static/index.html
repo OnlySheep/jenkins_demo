@@ -14,14 +14,13 @@
         }
 
         body {
-            font-family:
-                    -apple-system,
-                    BlinkMacSystemFont,
-                    "Segoe UI",
-                    "PingFang SC",
-                    "Microsoft YaHei",
-                    Arial,
-                    sans-serif;
+            font-family: -apple-system,
+            BlinkMacSystemFont,
+            "Segoe UI",
+            "PingFang SC",
+            "Microsoft YaHei",
+            Arial,
+            sans-serif;
             background: #f5f7fa;
             color: #303133;
             line-height: 1.7;
@@ -922,7 +921,6 @@
     };
 
 
-
     const themeMediaQuery =
         window.matchMedia("(prefers-color-scheme: dark)");
 
@@ -970,6 +968,7 @@
             setTheme("system", false);
         }
     });
+
     function setLanguage(language) {
 
         const elements = document.querySelectorAll("[data-i18n]");
